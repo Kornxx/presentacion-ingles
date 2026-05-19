@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Technology Fundamentals</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons for modern visuals -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* --- STREAMING_CHUNK:Styling layout wrapper and deck container... --- */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0;
+        }
+        
+        body {
+            background-color: #020c1b;
+            color: #ccd6f6;
+            font-family: 'Urbanist', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* Presentation Frame Container */
+        .presentation-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            position: relative;
+        }
+
+        .slide-deck {
+            background-color: #0a192f;
+            height: 720px;
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid #112240;
+            box-shadow: 0 30px 60px rgba(2, 12, 27, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Abstract CSS Background Effects (60-30-10 Rule) */
+        .slide-deck::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(100, 255, 218, 0.04) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-deck::after {
+            content: '';
+            position: absolute;
+            bottom: -15%;
+            left: -5%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(100, 255, 218, 0.03) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- STREAMING_CHUNK:Configuring slide transition states... --- */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 64px;
+            color: #ffffff;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        h2.slide-title {
+            font-size: 40px;
+            color: #64ffda;
+            margin-bottom: 40px;
+            text-align: left;
+            width: 100%;
+            border-left: 4px solid #64ffda;
+            padding-left: 20px;
+        }
+
+        h3 {
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #8892b0;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #64ffda;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        strong {
+            color: #ffffff;
+        }
+
+        /* --- STREAMING_CHUNK:Creating responsive grid patterns... --- */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .tiled-content {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .tile {
+            background: #112240;
+            border-radius: 12px;
+            padding: 35px;
+            flex: 1;
+            border-bottom: 3px solid transparent;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tile:hover {
+            transform: translateY(-5px);
+            border-color: #64ffda;
+        }
+
+        .tile .icon {
+            font-size: 45px;
+            color: #64ffda;
+            margin-bottom: 25px;
+        }
+
+        /* Dynamic Graphics (Replacing images with local CSS art) */
+        .tech-art-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 320px;
+            position: relative;
+        }
+
+        .tech-circle {
+            width: 220px;
+            height: 220px;
+            border: 4px dashed #64ffda;
+            border-radius: 50%;
+            position: absolute;
+            animation: rotate 20s linear infinite;
+        }
+
+        .tech-circle-inner {
+            width: 160px;
+            height: 160px;
+            border: 2px solid #233554;
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0b1e36;
+        }
+
+        .tech-circle-inner i {
+            font-size: 50px;
+            color: #64ffda;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Architecture Slide Components */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #112240;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #233554;
+            color: #64ffda;
+            padding: 20px;
+            text-align: left;
+            font-size: 20px;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #0a192f;
+            color: #ccd6f6;
+            font-size: 18px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .formula-box {
+            background: #020c1b;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            color: #64ffda;
+            font-size: 22px;
+            border: 1px solid #233554;
+        }
+
+        /* Careers Elements */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .stat-card {
+            background: #112240;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            border-left: 4px solid #64ffda;
+        }
+
+        .stat-number {
+            font-size: 72px;
+            font-weight: 700;
+            color: #64ffda;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        /* --- STREAMING_CHUNK:Designing interactive buttons and controls... --- */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding: 0 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            background-color: #112240;
+            color: #64ffda;
+            border: 1px solid #64ffda;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background-color: #0c1a30;
+            color: #4a5768;
+            border-color: #233554;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-indicator {
+            font-family: 'JetBrains Mono', monospace;
+            color: #8892b0;
+            font-size: 16px;
+            background-color: #112240;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #233554;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background-color: #112240;
+            margin-top: 15px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 8.33%;
+            background-color: #64ffda;
+            transition: width 0.3s ease;
+        }
+
+        /* Cover Slide Layout styling */
+        .slide-cover {
+            text-align: center;
+            align-items: center;
+        }
+
+        .slide-cover h1 {
+            font-size: 56px;
+            margin-bottom: 30px;
+            max-width: 950px;
+        }
+
+        .team-box {
+            margin-top: 50px;
+            border-top: 1px solid #233554;
+            padding-top: 30px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .team-box p {
+            margin-bottom: 5px;
+        }
+
+        ul.tech-list {
+            list-style: none;
+        }
+
+        ul.tech-list li {
+            font-size: 19px;
+            color: #8892b0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        ul.tech-list li i {
+            color: #64ffda;
+            font-size: 18px;
+        }
+
+        .keyboard-hint {
+            color: #4a5768;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Responsive Layout Overrides */
+        @media (max-width: 1024px) {
+            .slide-deck {
+                height: auto;
+                min-height: 600px;
+            }
+            .slide {
+                position: relative;
+                display: none;
+                padding: 40px;
+            }
+            .slide.active {
+                display: flex;
+            }
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .tiled-content {
+                flex-direction: column;
+            }
+            h1 { font-size: 42px; }
+            h2.slide-title { font-size: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- STREAMING_CHUNK:Building the HTML slides content... --- -->
+    <div class="presentation-wrapper">
+        <div class="slide-deck">
+
+            <!-- SLIDE 1: COVER PAGE -->
+            <div class="slide slide-cover active">
+                <p class="subtitle">Systems. Data. Infrastructure.</p>
+                <h1>Information Technology Fundamentals</h1>
+                <div class="team-box">
+                    <p style="color: #64ffda; font-family: 'JetBrains Mono'; font-size: 16px; text-transform: uppercase;">Presented by:</p>
+                    <p style="font-size: 24px; color: #ffffff; font-weight: 500;">Ishiro Isaac • Alanis Ochoa • Daniel Lucas</p>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: SECTION TITLE - MODULE 1 -->
+            <div class="slide" style="align-items: center; text-align: center;">
+                <p class="subtitle">Module 01 / Context</p>
+                <h1 style="max-width: 800px;">Defining the Scope of Modern Technology</h1>
+                <div style="width: 80px; height: 4px; background: #64ffda; margin-top: 35px;"></div>
+            </div>
+
+            <!-- SLIDE 3: WHAT IS IT? -->
+            <div class="slide">
+                <h2 class="slide-title">What is Information Technology?</h2>
+                <div class="content-area">
+                    <div class="two-column">
+                        <div>
+                            <p style="font-size: 22px; margin-bottom: 25px;">Information Technology (IT) represents the absolute core of today's digital operational infrastructures.</p>
+                            <p>It is the systematic utilization of computer systems, robust hardware servers, data transmission networks, and secure storage platforms to manage and protect critical operational data.</p>
+                            <ul class="tech-list" style="margin-top: 25px;">
+                                <li><i class="fas fa-database"></i> <span><strong>Structured Storage:</strong> Seamless, secure warehousing of assets.</span></li>
+                                <li><i class="fas fa-shield-halved"></i> <span><strong>System Protection:</strong> Protecting architectures from potential vectors of attack.</span></li>
+                            </ul>
+                        </div>
+                        <div class="tech-art-container">
+                            <div class="tech-circle"></div>
+                            <div class="tech-circle-inner">
+                                <i class="fas fa-server"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: WHAT IS INTERNET TECHNOLOGY? -->
+            <div class="slide">
+                <h2 class="slide-title">Information vs. Internet Technology</h2>
+                <div class="content-area">
+                    <div class="two-column">
+                        <div>
+                            <p style="font-size: 22px; margin-bottom: 25px;">While closely linked, they operate in completely distinct spheres of the technological ecosystem:</p>
+                            <ul class="tech-list">
+                                <li><i class="fas fa-microchip"></i> <span><strong>Information Technology (IT):</strong> Manages local computer systems, software configurations, database schemas, and on-premise configurations.</span></li>
+                                <li><i class="fas fa-network-wired"></i> <span><strong>Internet Technology:</strong> Focuses purely on global data connectivity, network packet protocols, optical routing networks, and cloud deployment platforms.</span></li>
+                            </ul>
+                        </div>
+                        <div class="tech-art-container">
+                            <div class="tech-circle" style="animation-direction: reverse; border-color: #8892b0;"></div>
+                            <div class="tech-circle-inner" style="background-color: #020c1b;">
+                                <i class="fas fa-globe" style="color: #64ffda;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: SECTION TITLE - MODULE 2 -->
+            <div class="slide" style="align-items: center; text-align: center;">
+                <p class="subtitle">Module 02 / Social & Business Impact</p>
+                <h1 style="max-width: 800px;">Technology Across Everyday Society & Enterprise</h1>
+                <div style="width: 80px; height: 4px; background: #64ffda; margin-top: 35px;"></div>
+            </div>
+
+            <!-- SLIDE 6: APPLICABLE ROLE -->
+            <div class="slide">
+                <h2 class="slide-title">The Applicable Roles of Technology</h2>
+                <div class="content-area">
+                    <div class="tiled-content">
+                        <div class="tile">
+                            <div class="icon"><i class="fas fa-user-doctor"></i></div>
+                            <h3>Modern Healthcare</h3>
+                            <p>Enables telemetry, remote digital diagnostics, and secure global access to electronic clinical health records.</p>
+                        </div>
+                        <div class="tile">
+                            <div class="icon"><i class="fas fa-laptop-code"></i></div>
+                            <h3>Active Education</h3>
+                            <p>Powers virtual classrooms, open-access databases, and distributed online training methodologies worldwide.</p>
+                        </div>
+                        <div class="tile">
+                            <div class="icon"><i class="fas fa-city"></i></div>
+                            <h3>Urban Logistics</h3>
+                            <p>Supports smart grid operations, traffic telemetry, and emergency communication services.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 7: ROLE IN BUSINESS -->
+            <div class="slide">
+                <h2 class="slide-title">The Role of IT in Global Business</h2>
+                <div class="content-area">
+                    <div class="two-column" style="grid-template-columns: 1fr 1fr; gap: 40px;">
+                        <div class="tile" style="border-left: 3px solid #64ffda;">
+                            <h3 style="color: #64ffda;"><i class="fas fa-clock" style="margin-right: 15px;"></i> Operational Efficiency</h3>
+                            <p>Automating complex administrative pipelines reduces human error, drives down overhead costs, and maximizes standard output velocity.</p>
+                        </div>
+                        <div class="tile" style="border-left: 3px solid #64ffda;">
+                            <h3 style="color: #64ffda;"><i class="fas fa-chart-line" style="margin-right: 15px;"></i> Tactical Intelligence</h3>
+                            <p>Harnessing automated data processing allows businesses to evaluate client demands, assess risk, and project market patterns with extreme accuracy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 8: SECTION TITLE - MODULE 3 -->
+            <div class="slide" style="align-items: center; text-align: center;">
+                <p class="subtitle">Module 03 / System Architecture</p>
+                <h1 style="max-width: 800px;">The Symbiosis of Hardware and Software</h1>
+                <div style="width: 80px; height: 4px; background: #64ffda; margin-top: 35px;"></div>
+            </div>
+
+            <!-- SLIDE 9: DIFFERENCES BETWEEN HARDWARE VS SOFTWARE -->
+            <div class="slide">
+                <h2 class="slide-title">Hardware vs. Software</h2>
+                <div class="content-area">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Hardware (Tangible Core)</th>
+                                <th>Software (Logical Framework)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Materiality</strong></td>
+                                <td>Physical silicon chips, copper cabling, motherboards.</td>
+                                <td>Intangible program code, script packages, protocols.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Operational Role</strong></td>
+                                <td>Executes physical electronic tasks and raw computing.</td>
+                                <td>Guides the hardware through instructional commands.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Degradation</strong></td>
+                                <td>Subject to physical friction, heat, and decay.</td>
+                                <td>Never decays physically; upgraded digitally over time.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Examples</strong></td>
+                                <td>Central Processing Units (CPUs), Solid State Drives (SSDs).</td>
+                                <td>Operating Systems (OS), Application Suites, Web Browsers.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="formula-box">
+                        COMPUTING = HARDWARE (PHYSICAL BASE) + SOFTWARE (LOGICAL CONTROL)
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 10: SECTION TITLE - MODULE 4 -->
+            <div class="slide" style="align-items: center; text-align: center;">
+                <p class="subtitle">Module 04 / Industry Outlook</p>
+                <h1 style="max-width: 800px;">Carving a Path in the Professional Sector</h1>
+                <div style="width: 80px; height: 4px; background: #64ffda; margin-top: 35px;"></div>
+            </div>
+
+            <!-- SLIDE 11: IT AS A CAREER PATH -->
+            <div class="slide">
+                <h2 class="slide-title">Careers in Information Technology</h2>
+                <div class="content-area">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">+15%</div>
+                            <p style="color: #64ffda; font-family: 'JetBrains Mono'; margin-bottom: 5px;">Projected Sector Growth</p>
+                            <p style="font-size: 16px;">Vastly outpacing alternative non-technical fields.</p>
+                        </div>
+                        <div>
+                            <p style="font-size: 22px; color: #ffffff; margin-bottom: 20px;">Highly Demanded Functional Paths:</p>
+                            <ul class="tech-list">
+                                <li><i class="fas fa-shield-halved"></i> <span><strong>Cybersecurity Architects:</strong> Shielding critical corporate assets.</span></li>
+                                <li><i class="fas fa-cloud"></i> <span><strong>Cloud Infrastructure Engineers:</strong> Structuring online databases.</span></li>
+                                <li><i class="fas fa-terminal"></i> <span><strong>Full-Stack Software Developers:</strong> Building interactive UI systems.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 12: CONCLUSION & Q&A -->
+            <div class="slide" style="align-items: center; text-align: center;">
+                <div class="icon" style="font-size: 70px; color: #64ffda; margin-bottom: 25px;"><i class="fas fa-circle-question"></i></div>
+                <h1 style="font-size: 56px; margin-bottom: 15px;">Any Questions?</h1>
+                <p style="font-size: 22px; color: #8892b0;">We appreciate your time and active engagement.</p>
+                <div style="margin-top: 50px; border-top: 1px solid #233554; padding-top: 25px; width: 100%; max-width: 500px;">
+                    <p style="font-family: 'JetBrains Mono'; font-size: 15px; color: #64ffda;">Ishiro Isaac • Alanis Ochoa • Daniel Lucas</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CONTROLS AND INTERACTIVE BAR -->
+        <div class="controls-bar">
+            <div class="keyboard-hint">
+                <i class="fas fa-keyboard"></i> Use Left/Right arrow keys on keyboard
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <button class="btn" id="btn-prev" onclick="changeSlide(-1)" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <div class="slide-indicator" id="slide-num">1 / 12</div>
+                <button class="btn" id="btn-next" onclick="changeSlide(1)">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Visual Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- --- STREAMING_CHUNK:Implementing the JavaScript navigation engine... --- -->
+    <script>
+        // Track the current active slide index
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const slideNumIndicator = document.getElementById('slide-num');
+        const progressFill = document.getElementById('progress-fill');
+
+        // Main function to transition slide views
+        function showSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= slides.length) index = slides.length - 1;
+
+            currentSlideIndex = index;
+
+            // Remove/Add active class to cycle presentation slides
+            slides.forEach((slide, idx) => {
+                if (idx === currentSlideIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            // Update numerical current progress indicator
+            slideNumIndicator.innerText = `${currentSlideIndex + 1} / ${slides.length}`;
+
+            // Adjust width of visual timeline feedback
+            const progressPercentage = ((currentSlideIndex + 1) / slides.length) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
+
+            // State handling for next / back buttons
+            btnPrev.disabled = (currentSlideIndex === 0);
+            btnNext.disabled = (currentSlideIndex === slides.length - 1);
+        }
+
+        // Action helper for UI calls
+        function changeSlide(direction) {
+            showSlide(currentSlideIndex + direction);
+        }
+
+        // Add physical keyboard support for presentational workflow
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+
+        // Initialize view state cleanly on loaded document
+        window.onload = function() {
+            showSlide(0);
+        };
+    </script>
+</body>
+</html>
